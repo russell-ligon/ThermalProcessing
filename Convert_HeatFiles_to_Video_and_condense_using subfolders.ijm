@@ -369,3 +369,4 @@ for(q=0; q<folderList.length; q++){ // cycle through every folder in folderList
 	}  
 //  setBatchMode(false);
 
+}
