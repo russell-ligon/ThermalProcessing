@@ -6,6 +6,78 @@ library(zoo)
 library(circular)
 
 
+####DOWNSAMPLES DATA to 1HTZ
+onesecond.downsampler<-function(datatodownsample=profileplainpee,startingnames=profileplainpee$label){
+  
+  #print(paste("Downsampling ",dir,sep=''))
+  #frameinfo<-lapply(FullFiles.FullNames,function(x) strsplit(x,"2018-"))
+
+  if(length(grep("2019",startingnames[1]))==0){
+    frameinfo<-strsplit(startingnames,"2019-")
+  } else {
+    frameinfo<-strsplit(startingnames,"2018-")
+  }
+  
+  
+  alltimes<-lapply(frameinfo,function(x) strsplit(x[2],".csv"))
+  oknow<-lapply(alltimes,function(x) strsplit(x[[1]],"_"))
+  oknow2<-unlist(lapply(oknow,function(x) x[[1]][c(2)]))
+  oknow3<-unlist(lapply(oknow,function(x) x[[1]][c(1)]))
+  
+  fileinformation<-data.frame(matrix(unlist(alltimes),nrow=length(alltimes),byrow=T));colnames(fileinformation)<-"V1"
+  fileinformation$day<-oknow3
+  fileinformation$tosecond<-oknow2
+  fileinformation$check<-paste(oknow3,oknow2,sep="-")
+  fileinformation$unique.time<-!duplicated(fileinformation$check)      
+  
+  
+  #deleters<-fileinformation[which(!fileinformation$unique.time),]
+  
+  downsampled<-datatodownsample[which(fileinformation$unique.time),]
+  return(downsampled)
+}
+#downsample just list of names
+onesecondgroups<-function(startingnames){
+  if(length(grep("2019",startingnames[1]))==0){
+    frameinfo<-strsplit(startingnames,"2018-")
+  } else {
+    frameinfo<-strsplit(startingnames,"2019-")
+  }
+  
+  alltimes<-lapply(frameinfo,function(x) strsplit(x[2],".csv"))
+  oknow<-lapply(alltimes,function(x) strsplit(x[[1]],"_"))
+  oknow2<-unlist(lapply(oknow,function(x) x[[1]][c(2)]))
+  oknow3<-unlist(lapply(oknow,function(x) x[[1]][c(1)]))
+  
+  fileinformation<-data.frame(matrix(unlist(alltimes),nrow=length(alltimes),byrow=T));colnames(fileinformation)<-"V1"
+  fileinformation$day<-oknow3
+  fileinformation$tosecond<-oknow2
+  fileinformation$check<-paste(oknow3,oknow2,sep="-")
+  return(fileinformation$check)
+}
+#just return downsample indices
+onesecond.index<-function(startingnames){
+  if(length(grep("2019",startingnames[1]))==0){
+    frameinfo<-strsplit(startingnames,"2018-")
+  } else {
+    frameinfo<-strsplit(startingnames,"2019-")
+  }
+  
+  alltimes<-lapply(frameinfo,function(x) strsplit(x[2],".csv"))
+  oknow<-lapply(alltimes,function(x) strsplit(x[[1]],"_"))
+  oknow2<-unlist(lapply(oknow,function(x) x[[1]][c(2)]))
+  oknow3<-unlist(lapply(oknow,function(x) x[[1]][c(1)]))
+  
+  fileinformation<-data.frame(matrix(unlist(alltimes),nrow=length(alltimes),byrow=T));colnames(fileinformation)<-"V1"
+  fileinformation$day<-oknow3
+  fileinformation$tosecond<-oknow2
+  fileinformation$check<-paste(oknow3,oknow2,sep="-")
+  fileinformation$unique.time<-!duplicated(fileinformation$check) 
+  return(which(fileinformation$unique.time))
+  
+}
+
+
 
 
 # CreateCompositeList -----------------------------------------------------
