@@ -529,7 +529,7 @@ if(checkfornewfolders=="check"){
                     
                     prevrowstodrop<-grep("_0",str_sub(frameIDs2,-2,))
                     addframe<-addframe[-prevrowstodrop,]
-                    prestartedframes<-nrows(addframe)
+                    prestartedframes<-nrow(addframe)
                     frameIDs2<-frameIDs2[-prevrowstodrop]
                     
                   } else {
